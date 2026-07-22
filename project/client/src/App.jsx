@@ -9,7 +9,7 @@ function App() {
 
   return (
     <>
-      <h1>Welcome to moview ticket APP</h1>
+      <h1>Movie Ticket APP</h1>
     </>
   )
 }
