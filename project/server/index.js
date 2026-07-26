@@ -4,13 +4,15 @@ const dotEnv = require('dotenv');
 dotEnv.config();
 
 // Connect to the database
-dbConfig.connectDb();
 const app = express();
+dbConfig.connectDb();
+app.use(express.json());
 
 
-app.get('/', (req, res) => {
-    res.send('Hello World!');
-});
+const userRouter = require('./routers/user.router.js');
+app.use('/api/auth', userRouter);
+
+
 
 app.listen(3000, () => {
     console.log('Server is running on port 3000');
