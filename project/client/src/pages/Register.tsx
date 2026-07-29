@@ -1,4 +1,4 @@
-import { Button, Form, Input} from "antd";
+import { Button, Form, Input, message} from "antd";
 import { Link } from "react-router-dom"
 import { register } from "../apiCalls/authCalls";
 import type { UserRegiseter } from "../models/authCall.model";
@@ -7,9 +7,14 @@ function Register() {
     const onSubmit = async(values: UserRegiseter) => {
         try {
             const data = await register(values);
-            console.log('data', data)
-        } catch (error) {
-            
+            console.log('data', data);
+            if(data.success) {
+              message.success(data.message);
+            } else {
+              message.error(data.message);
+            }
+        } catch (error: any) {
+            message.error(error.message || "Something went wrong");
         }
     }
   return (

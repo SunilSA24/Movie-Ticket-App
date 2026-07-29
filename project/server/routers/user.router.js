@@ -22,7 +22,7 @@ userRouter.post('/register', async (req, res) => {
         await newUser.save();
 
         res.send({
-            status: 200,
+            status: true,
             message: "User created successfully",
             data: newUser
         })
