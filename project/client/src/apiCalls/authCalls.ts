@@ -4,7 +4,8 @@ import { API_BASE_URL } from './config';
 import type { UserLogin, UserRegiseter } from '../models/authCall.model';
 
 const axioInstance = axios.create({
-    baseURL: API_BASE_URL
+    baseURL: API_BASE_URL,
+    withCredentials: true
 })
 
 export const register = async(value:UserRegiseter) => {
@@ -19,6 +20,15 @@ export const register = async(value:UserRegiseter) => {
 export const login = async(value: UserLogin)  => {
     try {
         const response = await axioInstance.post('/api/auth/login', value);
+        return response.data;
+    } catch (error) {
+        
+    }
+}
+
+export const getCurrenetUser = async() => {
+    try {
+        const response = await axioInstance.get('/api/auth/current-user', {withCredentials: true});
         return response.data;
     } catch (error) {
         

@@ -2,6 +2,8 @@ const express = require("express");
 const userModel = require("../models/user.model.js");
 const bcrypt = require('bcrypt');
 const userRouter = express.Router();
+const jwtToken = require('jsonwebtoken');
+const isAuth = require('../middleware/authMiddleware.js');
 
 // Create a new user
 userRouter.post('/register', async (req, res) => {
@@ -9,8 +11,8 @@ userRouter.post('/register', async (req, res) => {
         // check user already exists
         const userExists = await userModel.findOne({ email: req.body.email })
         if (userExists) {
-            res.send({
-                status: 400,
+            return res.status(400).send({
+                success: false,
                 message: "User already exists"
             })
         }
@@ -38,7 +40,7 @@ userRouter.post('/login', async (req, res) => {
         // first check user exist or not 
         const userExist = await userModel.findOne({ email: req.body.email })
         if (!userExist) {
-            res.send({
+            return res.send({
                 success: false,
                 message: 'user does not exist please check the user entered'
             });
@@ -47,19 +49,48 @@ userRouter.post('/login', async (req, res) => {
         const validPassword = await bcrypt.compare(req.body.password, userExist.password);
 
         if (!validPassword) {
-            res.send({
+            return res.send({
                 success: false,
                 message: 'Password incorrect'
             });
         }
+        const token = jwtToken.sign({ userId: userExist._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
+
+        res.cookie('jwtToken', token, {
+            httpOnly: true
+        });
+
         res.send({
             success: true,
-            message: 'User login successfully'
+            message: 'User login successfully',
+            user: userExist
         })
     } catch (error) {
         res.status(500).json(error);
     }
 
+})
+
+userRouter.get('/current-user', isAuth, async (req, res) => {
+    console.log("connected");
+    try {
+       const verifiedUser = await userModel.findById(req.userId).select('-password');
+       if(!verifiedUser) {
+        return res.status(401).json({
+            success: false,
+            message: "User not found"
+        });  
+       }
+        res.json({
+            _id: verifiedUser._id,
+            name: verifiedUser.name,
+            email: verifiedUser.email,
+            role: verifiedUser.role,
+        });
+    } catch (error) {
+        console.log("error", error);
+        res.status(500).json(error);
+    }
 })
 
 module.exports = userRouter;
