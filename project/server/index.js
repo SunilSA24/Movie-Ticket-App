@@ -18,8 +18,12 @@ app.use(express.json());
 app.use(cookieParse());
 
 const userRouter = require('./routers/user.router.js');
+const movieRouter = require('./routers/movie.router.js');
+
 const cookieParser = require('cookie-parser');
+
 app.use('/api/auth', userRouter);
+app.use('/api/movie', movieRouter);
 
 app.listen(3000, () => {
     console.log('Server is running on port 3000');
