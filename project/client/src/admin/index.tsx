@@ -19,7 +19,10 @@ function Admin() {
     ]
 
   return (
-    <Tabs items={tabItem} />
+    <div className="md-5">
+        <Tabs items={tabItem} />
+    </div>
+    
   )
 }
 
