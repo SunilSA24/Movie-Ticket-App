@@ -1,13 +1,16 @@
 import { Button, Card, Form, Input, message } from "antd";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import type { UserLogin } from "../models/authCall.model";
 import { login } from "../apiCalls/authCalls";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setUserData } from "../redux/slices/user";
+
 
 function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const userdata = useSelector((state: any) => state.user?.userData);
 
   const onSubmit = async (value: UserLogin) => {
     try {
@@ -22,6 +25,10 @@ function Login() {
     } catch (error: any) {
       message.error(error.message || 'Something went wrong');
     }
+  }
+
+  if(userdata) {
+    return <Navigate to='/home' />
   }
 
   return (

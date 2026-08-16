@@ -9,42 +9,54 @@ body,
   overflow-x: hidden;
 }
 
-.home-page {
+.home-shell {
   min-height: 100vh;
-  padding: 1rem;
   background: linear-gradient(135deg, #fff5f6 0%, #ffffff 100%);
 }
 
-.movie-navbar {
+.movie-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  padding: 1rem 1.25rem;
+  padding: 1rem 1.5rem;
   background: #fff;
-  border-radius: 16px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-  border: 1px solid #f8d9dd;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  border-bottom: 1px solid #f7dfe3;
 }
 
 .navbar-brand {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
-  font-size: 1.2rem;
-  font-weight: 700;
-  color: rgb(235, 78, 98);
-  white-space: nowrap;
+  gap: 0.7rem;
+  min-width: 180px;
 }
 
 .brand-icon {
-  font-size: 1.3rem;
+  font-size: 1.4rem;
+  background: rgba(235, 78, 98, 0.12);
+  border-radius: 50%;
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.brand-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #d84a60;
+}
+
+.brand-subtitle {
+  font-size: 0.8rem;
+  color: #777;
 }
 
 .navbar-search {
   flex: 1;
-  max-width: 520px;
-  margin: 0 1rem;
+  max-width: 560px;
 }
 
 .navbar-search-input .ant-input-group-wrapper {
@@ -54,40 +66,108 @@ body,
 
 .navbar-search-input .ant-input {
   border-radius: 999px 0 0 999px;
+  height: 44px;
 }
 
 .navbar-search-input .ant-btn {
   border-radius: 0 999px 999px 0;
-  background: rgb(235, 78, 98);
-  border-color: rgb(235, 78, 98);
+  height: 44px;
+  background: #d84a60;
+  border-color: #d84a60;
 }
 
 .navbar-search-input .ant-btn:hover {
-  background: #d84a60;
-  border-color: #d84a60;
+  background: #c63f53;
+  border-color: #c63f53;
 }
 
 .navbar-actions {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  min-width: 170px;
+  min-width: 180px;
 }
 
 .signin-btn {
-  background: rgb(235, 78, 98) !important;
-  border-color: rgb(235, 78, 98) !important;
+  background: #d84a60 !important;
+  border-color: #d84a60 !important;
   border-radius: 999px;
   padding-inline: 1.1rem;
 }
 
 .signin-btn:hover {
-  background: #d84a60 !important;
-  border-color: #d84a60 !important;
+  background: #c63f53 !important;
+  border-color: #c63f53 !important;
 }
 
-.profile-chip {
+.user-panel {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.user-menu-trigger {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: #fff;
+  border: 1px solid #f2d4d8;
+  border-radius: 999px;
+  padding: 0.35rem 0.7rem;
+}
+
+.user-name-text {
+  color: #333;
+  font-size: 0.95rem;
+}
+
+.user-actions-column {
+  display: flex;
+  align-items: center;
+}
+
+.dropdown-link {
+  color: #333;
+  text-decoration: none;
+  font-size: 0.92rem;
+}
+
+.logout-btn {
+  border: none;
+  background: #d84a60;
+  color: #fff;
+  padding: 0.45rem 0.8rem;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.92rem;
+  border-radius: 999px;
+}
+
+.home-content {
+  padding: 2rem 1.5rem;
+}
+
+.home-content .ant-row {
+  width: 100%;
+  margin: 0;
+}
+
+.home-content .ant-col {
+  display: flex;
+}
+
+.home-content .movie-card {
+  width: 100%;
+  height: 100%;
+}
+
+.home-content h2 {
+  margin-bottom: 0.3rem;
   color: #222;
+}
+
+.home-content p {
+  color: #666;
 }
 
 * {

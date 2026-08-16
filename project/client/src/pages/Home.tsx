@@ -1,65 +1,37 @@
-import { useEffect } from "react";
-import { Avatar, Button, Input, Space, Typography } from "antd";
-import { Link } from "react-router-dom";
-import { getCurrenetUser } from "../apiCalls/authCalls";
-import { useDispatch, useSelector } from "react-redux";
-import { setUserData } from "../redux/slices/user";
 
-const { Text } = Typography;
+import { useEffect, useState } from "react";
+import { Row, Col } from "antd";
+import Navbar from "../component/Navbar";
+import { getAllMovies } from "../apiCalls/movieCalls";
+import MovieCard from "../component/MovieCard";
+import type { MovieModel } from "../models/movie.model";
 
 function Home() {
-    const dispatch = useDispatch();
-    const { userData } = useSelector((state: any) => state.user);
-
-    const getUser = async () => {
-        try {
-            const userData = await getCurrenetUser();
-            dispatch(setUserData(userData));
-        } catch (error) {
-            console.error(error);
-        }
-    };
+    const [movies, setMovies] = useState<MovieModel[]>([]);
 
     useEffect(() => {
-        getUser();
+        (async () => {
+            try {
+                const fetchedMovies = await getAllMovies();
+                setMovies(fetchedMovies.data || []);
+            } catch (error) {
+                console.error(error);
+            }
+        })();
     }, []);
 
-    const isLoggedIn = Boolean(userData?.name);
-
     return (
-        <div className="home-page">
-            <nav className="movie-navbar">
-                <div className="navbar-brand">
-                    <span className="brand-icon">🎬</span>
-                    <span className="brand-name">MovieApp</span>
-                </div>
-
-                <div className="navbar-search">
-                    <Input.Search
-                        placeholder="Search movies..."
-                        size="large"
-                        enterButton
-                        className="navbar-search-input"
-                    />
-                </div>
-
-                <div className="navbar-actions">
-                    {isLoggedIn ? (
-                        <Space align="center" size="small" className="profile-chip">
-                            <Avatar style={{ backgroundColor: "rgb(235, 78, 98)" }}>
-                                {userData?.name?.charAt(0)?.toUpperCase() || "U"}
-                            </Avatar>
-                            <Text strong>{userData?.name}</Text>
-                        </Space>
-                    ) : (
-                        <Link to="/login">
-                            <Button type="primary" size="large" className="signin-btn">
-                                Sign In
-                            </Button>
-                        </Link>
-                    )}
-                </div>
-            </nav>
+        <div className="home-shell">
+            <Navbar />
+            <div className="home-content">
+                <Row gutter={[16, 16]}>
+                    {movies.map((movie, index) => (
+                        <Col xs={24} sm={12} lg={8} key={`${movie.title}-${index}`}>
+                            <MovieCard movie={movie} />
+                        </Col>
+                    ))}
+                </Row>
+            </div>
         </div>
     );
 }
