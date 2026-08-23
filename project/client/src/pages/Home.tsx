@@ -9,7 +9,7 @@ import { useDispatch } from "react-redux";
 import { setMoviesList } from "../redux/slices/movies";
 
 function Home() {
-    const [movies, setMovies] = useState<MovieModel[]>([]);
+    const [movies, setMovies] = useState<MovieModel[]>();
     const dispatch = useDispatch()
 
 
@@ -17,8 +17,8 @@ function Home() {
         (async () => {
             try {
                 const fetchedMovies = await getAllMovies();
-                dispatch(setMoviesList(fetchedMovies.data || []))
-                setMovies(fetchedMovies.data || []);
+                dispatch(setMoviesList(fetchedMovies.data))
+                setMovies(fetchedMovies.data);
             } catch (error) {
                 console.error(error);
             }
@@ -30,7 +30,7 @@ function Home() {
             <Navbar />
             <div className="home-content">
                 <Row gutter={[16, 16]}>
-                    {movies.map((movie, index) => (
+                    {movies?.map((movie, index) => (
                         <Col xs={24} sm={12} lg={8} key={`${movie.title}-${index}`}>
                             <MovieCard movie={movie} />
                         </Col>

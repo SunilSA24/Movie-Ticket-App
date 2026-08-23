@@ -4,6 +4,7 @@ import TheaterList from "./TheaterList"
 
 
 function Admin() {
+    
 
     const tabItem = [
         {
@@ -20,7 +21,7 @@ function Admin() {
 
   return (
     <div className="md-5">
-        <Tabs items={tabItem} />
+        <Tabs items={tabItem} />     
     </div>
     
   )

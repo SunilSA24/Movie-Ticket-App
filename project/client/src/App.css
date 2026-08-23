@@ -301,8 +301,7 @@ body,
   display: block;
 }
 
-input,
-select {
+.movie-form input:not(.ant-select-input) {
   min-height: 45px;
 }
 
@@ -346,17 +345,23 @@ button {
 .justify-content-end {
   justify-content: end;
 }
+.d-flex {
+  display: flex;
+}
 
 .fs-12 {
   font-size: 12px;
 }
 
-.ant-select-selector {
+.movie-form-select .ant-select-selector {
   height: 45px !important;
+  display: flex;
+  align-items: center;
 }
 
-.ant-select-selection-item {
-  padding-top: 5px !important;
+.movie-form-select .ant-select-selection-item,
+.movie-form-select .ant-select-selection-placeholder {
+  line-height: normal !important;
 }
 
 table th {

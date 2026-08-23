@@ -1,14 +1,15 @@
 import { useSelector } from "react-redux"
-import type { MovieModel } from "../models/movie.model";
-import { Table } from "antd";
+import { Button, Table } from "antd";
 import moment from "moment";
-
+import { useState } from "react";
+import MovieForm from "./MovieForm";
+import type { RootState } from "../redux/store";
 
 
 function MovieList() {
-  const movies = useSelector((state: { movies?: { data?: MovieModel[] } }) => state.movies?.data ?? []);
-  console.log("Movies", movies);
-
+  const movies = useSelector((state: RootState) => state.movies);
+  const [isModalOpen, setModalOpen] = useState<boolean>(false)
+  
   const tableList = [
     {
       key: 'posterPath',
@@ -55,8 +56,16 @@ function MovieList() {
     },
   ];
 
-  return (
-      <Table columns={tableList} dataSource={movies} rowKey="title" />
+  return ( <>
+    <div className="d-flex justify-content-end mb-3">
+      <Button type="primary" onClick={() => {
+        setModalOpen(true)
+      }}>Add Movies</Button>
+    </div>
+    <Table columns={tableList} dataSource={movies} rowKey="title" />
+    {isModalOpen && <MovieForm isModalOpen={isModalOpen} setModalOpen={setModalOpen}/>}
+  </>
+    
   )
 }
 

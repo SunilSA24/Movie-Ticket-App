@@ -1,16 +1,14 @@
-import { createSlice } from "@reduxjs/toolkit"
-import type { MovieData, MovieModel } from "../../models/movie.model"
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit"
+import type { MovieModel } from "../../models/movie.model"
 
-const initialState: MovieData = {
-    data: []
-};
+const initialState: MovieModel[] = []
 
 const moviesList = createSlice({
     name: 'movies',
     initialState,
     reducers: {
-        setMoviesList: (state, action) => {
-            state.data = action.payload as MovieModel[];
+        setMoviesList: (_state, action: PayloadAction<MovieModel[]>) => {
+            return action.payload as MovieModel[];
         }
     }
 });
