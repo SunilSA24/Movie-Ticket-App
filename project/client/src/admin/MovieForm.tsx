@@ -1,26 +1,55 @@
-import { Button, Col, Form, Input, Modal, Row, Select } from "antd"
+import { Button, Col, Form, Input, message, Modal, Row, Select } from "antd"
 import TextArea from "antd/es/input/TextArea"
-import { addMovies } from "../apiCalls/movieCalls"
+import moment from "moment"
+import { addMovies, updateMovie } from "../apiCalls/movieCalls"
 import type { MovieModel } from "../models/movie.model"
 
 interface MovieFormProps {
-  isModalOpen: boolean
-  setModalOpen: (isOpen: boolean) => void
+  isModalOpen: boolean,
+  setModalOpen: (isOpen: boolean) => void,
+  selectedMovie?: MovieModel,
+  formType: string,
+  setSelectedMovie: (movie?: MovieModel) => void
 }
 
-function MovieForm({ isModalOpen, setModalOpen }: MovieFormProps) {
+const formatDateInputValue = (date?: string | Date) => {
+  if (!date) return undefined;
+
+  const parsedDate = moment(date);
+  return parsedDate.isValid() ? parsedDate.format("YYYY-MM-DD") : undefined;
+}
+
+function MovieForm({ isModalOpen, setModalOpen, selectedMovie, formType, setSelectedMovie }: MovieFormProps) {
 
   const handleCancel = () => {
     setModalOpen(false);
   }
 
   const handleSubmit = async (value: MovieModel) => {
-    try {
-      const resp = await addMovies(value);
-      console.log('res', resp);
-    } catch (error) {
-      console.error(error)
+    if (formType === 'add') {
+      try {
+        const resp = await addMovies(value);
+        if (resp.success) {
+          message.success(resp.message);
+          setModalOpen(false);
+        }
+      } catch (error) {
+        console.error(error)
+      }
+    } else {
+      if (!selectedMovie) return;
+      try {
+        const res = await updateMovie({...value, _id: selectedMovie._id})
+        if(res.success) {
+          setSelectedMovie(undefined);
+          setModalOpen(false);
+          message.success(res.message);
+        }
+      } catch (error) {
+        console.error(error)
+      }
     }
+    
   }
 
 
@@ -31,7 +60,10 @@ function MovieForm({ isModalOpen, setModalOpen }: MovieFormProps) {
         layout="vertical"
         style={{ width: "100%" }}
         onFinish={handleSubmit}
-        initialValues={{ language: undefined, genre: undefined }}
+        initialValues={{
+          ...selectedMovie,
+          releaseDate: formatDateInputValue(selectedMovie?.releaseDate),
+        }}
       >
         <Row
           gutter={{
@@ -92,7 +124,7 @@ function MovieForm({ isModalOpen, setModalOpen }: MovieFormProps) {
                 >
                   <Input
                     id="duration"
-                    type="number"
+                    type="string"
                     placeholder="Enter the movie duration"
                   ></Input>
                 </Form.Item>
@@ -119,6 +151,7 @@ function MovieForm({ isModalOpen, setModalOpen }: MovieFormProps) {
                       { value: "Telugu", label: "Telugu" },
                       { value: "Bengali", label: "Bengali" },
                       { value: "German", label: "German" },
+                      { value: "Kannada", label: "Kannada" },
                     ]}
                   />
                 </Form.Item>
@@ -177,6 +210,7 @@ function MovieForm({ isModalOpen, setModalOpen }: MovieFormProps) {
                       { value: "Bhakti", label: "Bhakti" },
                       { value: "Thriller", label: "Thriller" },
                       { value: "Mystery", label: "Mystery" },
+                      { value: "Sports", label: "Sports" },
                     ]}
                   />
                 </Form.Item>
@@ -210,7 +244,7 @@ function MovieForm({ isModalOpen, setModalOpen }: MovieFormProps) {
           >
             Submit the Data
           </Button>
-          <Button className="mt-3" block>
+          <Button onClick={handleCancel} className="mt-3" block>
             Cancel
           </Button>
         </Form.Item>

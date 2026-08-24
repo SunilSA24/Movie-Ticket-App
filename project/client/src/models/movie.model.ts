@@ -7,7 +7,9 @@ export interface MovieModel {
   description?: string;
   language: string[];
   duration: string;
+  genre: string;
   releaseDate: string | Date;
   posterPath: string;
   rating?: number;
+  _id: string;
 }

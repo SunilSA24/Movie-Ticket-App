@@ -1,15 +1,20 @@
 import { useSelector } from "react-redux"
-import { Button, Table } from "antd";
+import { Button, Table,  } from "antd";
+import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import moment from "moment";
 import { useState } from "react";
 import MovieForm from "./MovieForm";
 import type { RootState } from "../redux/store";
+import type { MovieModel } from "../models/movie.model";
+import DeleteModal from "../component/DeleteModal";
 
 
 function MovieList() {
   const movies = useSelector((state: RootState) => state.movies);
-  const [isModalOpen, setModalOpen] = useState<boolean>(false)
-  
+  const [isModalOpen, setModalOpen] = useState<boolean>(false);
+  const [isDeleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
+  const [selectedMovie, setSelectedMovie] = useState<MovieModel | undefined>()
+  const [formType, setFormType] = useState<string>('add')
   const tableList = [
     {
       key: 'posterPath',
@@ -54,16 +59,47 @@ function MovieList() {
       title: 'Rating',
       dataIndex: 'rating',
     },
+    {
+      key: 'action',
+      title: 'Action',
+      render: (_text: unknown, record: MovieModel) => {
+        return <div className="d-flex gap-5">
+          <Button onClick={() => {
+            setModalOpen(true)
+            setSelectedMovie(record)
+            setFormType('edit');
+          }}><EditOutlined /></Button>
+          <Button onClick={() => {
+            setDeleteModalOpen(true)
+            setSelectedMovie(record);
+          }}><DeleteOutlined /></Button>
+        </div>
+      }
+    },
   ];
 
   return ( <>
     <div className="d-flex justify-content-end mb-3">
       <Button type="primary" onClick={() => {
         setModalOpen(true)
+        setFormType('add');
       }}>Add Movies</Button>
     </div>
     <Table columns={tableList} dataSource={movies} rowKey="title" />
-    {isModalOpen && <MovieForm isModalOpen={isModalOpen} setModalOpen={setModalOpen}/>}
+
+    {isModalOpen && <MovieForm 
+    isModalOpen={isModalOpen} 
+    setModalOpen={setModalOpen} 
+    selectedMovie={selectedMovie}
+    formType={formType}
+    setSelectedMovie={setSelectedMovie}
+    />}
+
+    {isDeleteModalOpen && <DeleteModal 
+    isDeleteModalOpen={isDeleteModalOpen} 
+    setDeleteModalOpen={setDeleteModalOpen}
+    selectedMovie={selectedMovie}
+    setSelectedMovie={setSelectedMovie}/>}
   </>
     
   )

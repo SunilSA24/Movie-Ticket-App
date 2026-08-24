@@ -12,12 +12,32 @@ export const getAllMovies = async (): Promise<MovieData> => {
     }
 };
 
-export const addMovies = async (value: MovieModel): Promise<MovieModel> => {
+export const addMovies = async (value: MovieModel) => {
     try {
         const response = await axiosInstance.post('/api/movie/add-movie', value);
-        return response.data as MovieModel;
+        return response.data;
     } catch (error) {
         console.error(error);
         return {} as MovieModel;
     }
 };
+
+export const updateMovie = async (payLoad: MovieModel) => {
+    try {
+        const response = await axiosInstance.put('/api/movie/update-movie', payLoad);
+        return response.data;
+    } catch (error) {
+        console.error(error);
+        return {} as MovieModel;
+    }
+}
+
+export const deleteMovie = async (payLoad: MovieModel) => {
+    try {
+        const response = await axiosInstance.delete('/api/movie/delete-movie', { data: payLoad });
+        return response.data;
+    } catch (error) {
+        console.error(error);
+        return {} as MovieModel;
+    }
+}

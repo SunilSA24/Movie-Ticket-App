@@ -21,10 +21,9 @@ movieRouter.post('/add-movie', async (req, res) => {
 });
 
 // update movie
-movieRouter.put('/update-movie/:id', async(req, res) => {
+movieRouter.put('/update-movie', async(req, res) => {
     try {
-        const movieId = req.params.id;
-        const updatedMovie = await Movie.findByIdAndUpdate(movieId, req.body);
+        const updatedMovie = await Movie.findByIdAndUpdate(req.body._id, req.body);
 
         res.status(200).send({
             success: true,
@@ -41,10 +40,9 @@ movieRouter.put('/update-movie/:id', async(req, res) => {
 });
 
 // Delete movie
-movieRouter.delete('/delete-movie/:id', async (req, res) => {
+movieRouter.delete('/delete-movie', async (req, res) => {
     try {
-        const movieId = req.params.id;
-        const deletedMovie = await Movie.findByIdAndDelete(movieId, req.body);
+        const deletedMovie = await Movie.findByIdAndDelete(req.body._id, req.body);
 
         res.status(200).send({
             success: true,
