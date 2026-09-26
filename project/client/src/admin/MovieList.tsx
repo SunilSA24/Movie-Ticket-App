@@ -83,6 +83,7 @@ function MovieList() {
       <Button type="primary" onClick={() => {
         setModalOpen(true)
         setFormType('add');
+        setSelectedMovie(undefined);
       }}>Add Movies</Button>
     </div>
     <Table columns={tableList} dataSource={movies} rowKey="title" />

@@ -27,7 +27,7 @@ movieRouter.put('/update-movie', async(req, res) => {
 
         res.status(200).send({
             success: true,
-            message: "Movie updated suceessfully",
+            message: "Movie updated successfully",
             data: updatedMovie
         });
     } catch (error) {
