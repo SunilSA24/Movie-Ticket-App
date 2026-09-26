@@ -7,10 +7,11 @@ const isAuth = require('../middleware/authMiddleware.js');
 
 // Create a new user
 userRouter.post('/register', async (req, res) => {
+    
     try {
         // check user already exists
         const userExists = await userModel.findOne({ email: req.body.email })
-        if (!userExists) {
+        if (userExists) {
             return res.status(400).send({
                 success: false,
                 message: "User already exists"
@@ -24,7 +25,7 @@ userRouter.post('/register', async (req, res) => {
         await newUser.save();
 
         res.send({
-            status: true,
+            success: true,
             message: "User created successfully",
             data: newUser
         })
@@ -85,7 +86,7 @@ userRouter.get('/current-user', isAuth, async (req, res) => {
             _id: verifiedUser._id,
             name: verifiedUser.name,
             email: verifiedUser.email,
-            role: verifiedUser.role,
+            role: verifiedUser.roles,
         });
     } catch (error) {
         console.log("error", error);

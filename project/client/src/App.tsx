@@ -6,6 +6,7 @@ import Home from './pages/Home';
 import ProtectedRoute from './component/ProtectedRoute';
 import PublicRoute from './component/PublicRoute';
 import Admin from './admin';
+import Partner from './partner';
 
 function App() {
 
@@ -17,6 +18,7 @@ function App() {
           <Route path='/login' element={<PublicRoute><Login /></PublicRoute>} />
           <Route path='/register' element={<PublicRoute><Register /></PublicRoute>} />
           <Route path='/admin' element={<Admin />} />
+          <Route path='/partner' element={<Partner />} />
         </Routes>
       </BrowserRouter>
     </>

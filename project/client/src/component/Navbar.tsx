@@ -1,20 +1,25 @@
 import { useEffect } from "react";
 import { Avatar, Button, Input } from "antd";
 import { Link, useNavigate } from "react-router-dom";
-import { getCurrenetUser } from "../apiCalls/authCalls";
 import { useDispatch, useSelector } from "react-redux";
+import type { RootState } from "../redux/store";
+import { getCurrentUser } from "../apiCalls/authCalls";
 import { clearUserData, setUserData } from "../redux/slices/user";
+import type { User } from "../models/user.model";
 
 // const { Text } = Typography;
 
 function Navbar() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { userData } = useSelector((state: any) => state.user);
+    const userData = useSelector(
+        (state: RootState) => state.user?.userData ?? null
+    ) as User | null;
 
     const getUser = async () => {
         try {
-            const userData = await getCurrenetUser();
+            const userData = await getCurrentUser();
+            console.log("userData", userData);
             dispatch(setUserData(userData));
         } catch (error) {
             console.error(error);
@@ -26,6 +31,7 @@ function Navbar() {
     }, [dispatch]);
 
     const isLoggedIn = Boolean(userData?.name);
+    const userRole = userData?.role ?? userData?.role ?? "user";
 
     const handleLogout = () => {
         dispatch(clearUserData());
@@ -58,7 +64,7 @@ function Navbar() {
                             <Avatar style={{ backgroundColor: "#d84a60" }}>
                                 {userData?.name?.charAt(0)?.toUpperCase() || "U"}
                             </Avatar>
-                            <Link to={'/admin'}  className="user-name-text">{userData?.name}</Link>
+                            <Link to={userRole === 'partner' ? '/partner' : '/admin'} className="user-name-text">{userData?.name}</Link>
                         </div>
 
                         <div className="user-actions-column">

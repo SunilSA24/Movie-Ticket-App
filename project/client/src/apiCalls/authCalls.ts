@@ -1,5 +1,6 @@
 import { axiosInstance } from './config';
 import type { UserLogin, UserRegiseter } from '../models/authCall.model';
+import type { User } from '../models/user.model';
 
 
 export const register = async(value:UserRegiseter) => {
@@ -20,10 +21,10 @@ export const login = async(value: UserLogin)  => {
     }
 }
 
-export const getCurrenetUser = async() => {
+export const getCurrentUser = async() => {
     try {
         const response = await axiosInstance.get('/api/auth/current-user', {withCredentials: true});
-        return response.data;
+        return response.data as User;
     } catch (error) {
         throw error;
     }

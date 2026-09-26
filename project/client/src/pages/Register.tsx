@@ -1,15 +1,17 @@
 import { Button, Card, Form, Input, message} from "antd";
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { register } from "../apiCalls/authCalls";
 import type { UserRegiseter } from "../models/authCall.model";
 
 function Register() {
+    const navigate = useNavigate();
     const onSubmit = async(values: UserRegiseter) => {
         try {
             const data = await register(values);
             console.log('data', data);
             if(data.success) {
               message.success(data.message);
+              navigate('/login');
             } else {
               message.error(data.message);
             }

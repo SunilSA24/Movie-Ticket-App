@@ -4,8 +4,6 @@ import TheaterList from "./TheaterList"
 
 
 function Admin() {
-    
-
     const tabItem = [
         {
             key: '1',
