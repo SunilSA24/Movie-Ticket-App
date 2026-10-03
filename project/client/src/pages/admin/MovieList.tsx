@@ -1,20 +1,34 @@
 import { useSelector } from "react-redux"
-import { Button, Table,  } from "antd";
+import { Button, Table, message } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import moment from "moment";
 import { useState } from "react";
 import MovieForm from "./MovieForm";
-import type { RootState } from "../redux/store";
-import type { MovieModel } from "../models/movie.model";
-import DeleteModal from "../component/DeleteModal";
-
+import type { RootState } from "../../redux/store";
+import type { MovieModel } from "../../models/movie.model";
+import DeleteModal from "../../component/DeleteModal";
+import { deleteMovie } from "../../apiCalls/movieCalls";
 
 function MovieList() {
   const movies = useSelector((state: RootState) => state.movies);
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
   const [isDeleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
-  const [selectedMovie, setSelectedMovie] = useState<MovieModel | undefined>()
-  const [formType, setFormType] = useState<string>('add')
+  const [selectedMovie, setSelectedMovie] = useState<MovieModel | undefined>();
+  const [formType, setFormType] = useState<string>('add');
+
+  const handleDeleteMovie = async () => {
+    if (!selectedMovie) return;
+
+    try {
+      const res = await deleteMovie(selectedMovie);
+      if (res?.success) {
+        message.success(res.message);
+        setSelectedMovie(undefined);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
   const tableList = [
     {
       key: 'posterPath',
@@ -99,8 +113,8 @@ function MovieList() {
     {isDeleteModalOpen && <DeleteModal 
     isDeleteModalOpen={isDeleteModalOpen} 
     setDeleteModalOpen={setDeleteModalOpen}
-    selectedMovie={selectedMovie}
-    setSelectedMovie={setSelectedMovie}/>}
+    onConfirm={handleDeleteMovie}
+    />}
   </>
     
   )

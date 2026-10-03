@@ -1,49 +1,40 @@
-import { message, Modal } from "antd"
-import type { MovieModel } from "../models/movie.model";
-import { deleteMovie } from "../apiCalls/movieCalls";
+import { Modal } from "antd";
 
-interface DeleteModal {
+interface DeleteModalProps {
     isDeleteModalOpen: boolean;
     setDeleteModalOpen?: (isOpen: boolean) => void;
-    selectedMovie?: MovieModel,
-    setSelectedMovie: (movie?: MovieModel) => void
+    onConfirm: () => Promise<void> | void;
+    title?: string;
+    message?: string;
 }
 
-
-
-function DeleteModal({isDeleteModalOpen, setDeleteModalOpen, selectedMovie, setSelectedMovie}: DeleteModal) {
-
-    const handleOk = async (value?: MovieModel) => {
-        if (!value) return
-        try {
-            const res = await deleteMovie(value)
-            if (res.success) {
-                message.success(res.message);
-                setDeleteModalOpen?.(false);
-                setSelectedMovie(undefined);
-                
-            }
-        } catch (error) {
-            console.error(error);
-        }
-    }
+function DeleteModal({
+    isDeleteModalOpen,
+    setDeleteModalOpen,
+    onConfirm,
+    title = "Delete Movie",
+    message = "Are you sure you want to delete this movie?"
+}: DeleteModalProps) {
+    const handleOk = async () => {
+        await onConfirm();
+        setDeleteModalOpen?.(false);
+    };
 
     const handleCancel = () => {
         setDeleteModalOpen?.(false);
-    }
+    };
 
-  return (
-    <Modal
-        title="Delete Movie"
-        closable={{ 'aria-label': 'Custom Close Button' }}
-        open={isDeleteModalOpen}
-        onOk={() => handleOk(selectedMovie)}
-        onCancel={handleCancel}
-      >
-        <h3>Are you sure you want to delete a selected movie</h3>
-        
-      </Modal>
-  )
+    return (
+        <Modal
+            title={title}
+            closable={{ "aria-label": "Custom Close Button" }}
+            open={isDeleteModalOpen}
+            onOk={handleOk}
+            onCancel={handleCancel}
+        >
+            <h3>{message}</h3>
+        </Modal>
+    );
 }
 
-export default DeleteModal
+export default DeleteModal;

@@ -1,5 +1,5 @@
 import { Tabs } from "antd"
-import TheaterListPartner from "./TheaterListPartner"
+import TheaterListPartner from "./TheatreListPartner"
 
 function Partner() {
     const tabItem = [

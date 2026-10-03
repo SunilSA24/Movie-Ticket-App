@@ -5,8 +5,8 @@ import Register from './pages/Register';
 import Home from './pages/Home';
 import ProtectedRoute from './component/ProtectedRoute';
 import PublicRoute from './component/PublicRoute';
-import Admin from './admin';
-import Partner from './partner';
+import Admin from './pages/admin';
+import Partner from './pages/partner';
 
 function App() {
 

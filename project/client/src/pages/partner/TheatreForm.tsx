@@ -1,48 +1,74 @@
-import { Button, Col, Form, Input, Modal, Row } from "antd";
-// import type { Theatre } from "../models/theatre.model";
+import { Button, Col, Form, Input, message, Modal, Row } from "antd";
+import type { Theatre } from "../../models/theatre.model";
+import { addTheatre, updateTheatre } from "../../apiCalls/theatreCalls";
+import type { User } from "../../models/user.model";
+
+
 
 
 interface TheatreFormProps {
   isModalOpen: boolean;
   setModalOpen: (isOpen: boolean) => void;
-//   selectedTheatre?: Theatre;
-//   formType: string;
-//   setSelectedTheatre: (theatre?: Theatre) => void;
+  selectedTheatre?: Theatre | null;
+  formType: "add" | "edit";
+  userData: User;
 }
 
 function TheatreForm({
   isModalOpen,
   setModalOpen,
+  selectedTheatre,
+  formType,
+  userData,
 }: TheatreFormProps) {
-
   const handleCancel = () => {
     setModalOpen(false);
-    // setSelectedTheatre(undefined);
   };
 
-//   const handleSubmit = async (values: {
-//     _id?: string;
-//     name: string;
-//     address: string;
-//     email: string;
-//     phone: number;
-//   }) => {
-//     if (formType === "add") {
-//       console.log("Add theatre", values);
-//       message.success("Theatre added successfully");
-//     } else {
-//       console.log("Update theatre", { ...values, _id: selectedTheatre?._id });
-//       message.success("Theatre updated successfully");
-//     }
-//     setModalOpen(false);
-//     setSelectedTheatre(undefined);
-//   };
+  const handleSubmit = async (values: Theatre) => {
+    if (!userData || !userData._id) {
+      message.error("User data not available. Please login again");
+      return;
+    }
+
+    if (formType === "add") {
+      const theatre: Theatre = {
+        ...values,
+        owner: userData._id,
+      };
+
+      const response = await addTheatre(theatre);
+      console.log("Add theatre", response);
+      message.success("Theatre added successfully");
+    } else {
+      const theatre: Theatre = {
+        ...selectedTheatre,
+        ...values,
+        _id: selectedTheatre?._id ?? values._id,
+        owner: selectedTheatre?.owner ?? userData._id,
+      };
+
+      const response = await updateTheatre(theatre);
+      console.log("Update theatre", response);
+      message.success("Theatre updated successfully");
+    }
+
+    setModalOpen(false);
+  };
 
   return (
-    <Modal width={700} open={isModalOpen} onCancel={handleCancel} footer={null}>
+    <Modal
+      width={700}
+      open={isModalOpen}
+      onCancel={handleCancel}
+      footer={null}
+      title={formType === "edit" ? "Edit Theatre" : "Add Theatre"}
+    >
       <Form
         layout="vertical"
         style={{ width: "100%" }}
+        onFinish={handleSubmit}
+        initialValues={selectedTheatre ?? undefined}
       >
         <Row gutter={{ xs: 6, sm: 10, md: 12, lg: 16 }}>
           <Col span={24}>
@@ -103,3 +129,5 @@ function TheatreForm({
 }
 
 export default TheatreForm;
+
+

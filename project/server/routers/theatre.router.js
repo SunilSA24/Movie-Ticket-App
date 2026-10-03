@@ -20,6 +20,21 @@ theatreRoute.post('/add-theatre', async(req, res) => {
     }
 });
 
+theatreRoute.post('/get-all-theatre-owner', async(req, res) => {
+    try {
+        const theatres = await Theatre.find({ owner: req.body.owner_id });
+        res.status(200).send({
+            success: true,
+            theatres
+        })
+    } catch (error) {
+        res.status(400).send({
+            success:false,
+            message: "Could not find theatres related to this owner"
+        })
+    }
+});
+
 // get all theatre
 theatreRoute.get('/all-theatre', async(req,res) => {
     try {
@@ -66,3 +81,5 @@ theatreRoute.delete('/delete-theatre', async(req, res) => {
         });
     }
 });
+
+module.exports = theatreRoute

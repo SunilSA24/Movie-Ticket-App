@@ -1,8 +1,8 @@
 import { Button, Col, Form, Input, message, Modal, Row, Select } from "antd"
 import TextArea from "antd/es/input/TextArea"
 import moment from "moment"
-import { addMovies, updateMovie } from "../apiCalls/movieCalls"
-import type { MovieModel } from "../models/movie.model"
+import { addMovies, updateMovie } from "../../apiCalls/movieCalls"
+import type { MovieModel } from "../../models/movie.model"
 
 interface MovieFormProps {
   isModalOpen: boolean,

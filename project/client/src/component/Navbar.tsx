@@ -1,34 +1,16 @@
-import { useEffect } from "react";
 import { Avatar, Button, Input } from "antd";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import type { RootState } from "../redux/store";
-import { getCurrentUser } from "../apiCalls/authCalls";
-import { clearUserData, setUserData } from "../redux/slices/user";
+import { useDispatch } from "react-redux";
+import { clearUserData } from "../redux/slices/user";
 import type { User } from "../models/user.model";
+import useUserController from "../controlers/userController";
 
 // const { Text } = Typography;
 
 function Navbar() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const userData = useSelector(
-        (state: RootState) => state.user?.userData ?? null
-    ) as User | null;
-
-    const getUser = async () => {
-        try {
-            const userData = await getCurrentUser();
-            console.log("userData", userData);
-            dispatch(setUserData(userData));
-        } catch (error) {
-            console.error(error);
-        }
-    };
-
-    useEffect(() => {
-        getUser();
-    }, [dispatch]);
+    const { userData } = useUserController() as { userData: User | null };
 
     const isLoggedIn = Boolean(userData?.name);
     const userRole = userData?.role ?? userData?.role ?? "user";
